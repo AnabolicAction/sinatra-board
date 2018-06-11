@@ -50,7 +50,9 @@ end
 
 #게시글 모두 보여주는 곳
 get '/posts' do
-    @posts =Post.all
+    @posts =Post.all.reverse
+    # @posts =Post.all(order=>[:id.desc])
+    
     erb :"posts/posts"
 end
 
@@ -64,4 +66,10 @@ get '/posts/create' do
     @body = params[:body]
     Post.create(title: @title, body: @body)
    erb :"posts/create"
+end
+
+get '/posts/:id' do
+    @id=params[:id]
+    @post=Post.get(@id)
+    erb :'posts/show'    
 end
