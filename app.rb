@@ -4,8 +4,9 @@
 gem 'json','~> 1.6'
 require 'sinatra'
 require "sinatra/reloader"
-require 'rest-client'
+require 'bcrypt'
 require './model.rb'
+
 
 
 #시나트라 사용할꺼임
@@ -77,6 +78,12 @@ get '/user' do
 end
 
 get '/user/create' do
+    #비번확인 다르면 가입x 같으면 가입시킴
+    # if params[:pwd] != params[:pwd_confirm]
+    #     redirect '/'
+    # else
+        
+    # end
     @name=params[:name]
     @email=params[:email]
     @pwd = params[:pwd]
@@ -90,4 +97,9 @@ get '/users' do
     # @users =user.all(order=>[:id.desc])
     
     erb :"user/users"
+end
+
+get '/users' do
+    @users -User.all
+    erb :"users"
 end

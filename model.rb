@@ -4,7 +4,14 @@ require 'data_mapper' # metagem, requires common plugins too.
 #dataMapper 로그찍기
 DataMapper::Logger.new($stdout, :debug)
 # need install dm-sqlite-adapter
+configure :development do
 DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/blog.db")
+end
+
+configure :production do
+  DataMapper::setup(:default, ENV["DATABASE_URL"])
+end
+
 
 class Post
   include DataMapper::Resource
