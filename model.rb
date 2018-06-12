@@ -1,10 +1,10 @@
 require 'data_mapper' # metagem, requires common plugins too.
 
-# datamapper 로그찍기
+
+#dataMapper 로그찍기
 DataMapper::Logger.new($stdout, :debug)
 # need install dm-sqlite-adapter
 DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/blog.db")
-
 
 class Post
   include DataMapper::Resource
@@ -14,9 +14,20 @@ class Post
   property :created_at, DateTime
 end
 
+class User
+  include DataMapper::Resource
+  property :id, Serial
+  property :name, String
+  property :email, String
+  property :pwd, Text
+  property :created_at, DateTime
+end
+
+
 # Perform basic sanity checks and initialize all relationships
 # Call this when you've defined all your models
 DataMapper.finalize
 
 # automatically create the post table
 Post.auto_upgrade!
+User.auto_upgrade!

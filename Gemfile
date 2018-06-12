@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
+gem 'json','~> 1.6'
 gem 'sinatra'
 gem 'sinatra-reloader'
 gem 'datamapper'
 gem 'dm-sqlite-adapter'
-gem 'json','~> 1.6'
+gem 'bcrypt'

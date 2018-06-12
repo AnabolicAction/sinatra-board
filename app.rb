@@ -5,7 +5,7 @@ gem 'json','~> 1.6'
 require 'sinatra'
 require "sinatra/reloader"
 require 'rest-client'
-
+require './model.rb'
 
 
 #시나트라 사용할꺼임
@@ -66,4 +66,28 @@ get '/posts/update/:id' do
      @id=params[:id]
     Post.get(@id).update(title: params[:title], body: params[:body])
     redirect '/posts/'+@id
+end
+
+
+#**************USER****************USER***************USER********************USER***********
+
+get '/user' do
+    
+   erb :'/user/user'
+end
+
+get '/user/create' do
+    @name=params[:name]
+    @email=params[:email]
+    @pwd = params[:pwd]
+    User.create(name: @name,email: @email, pwd: @pwd)
+   erb :"user/create"
+end
+
+#게시글 모두 보여주는 곳
+get '/users' do
+    @users =User.all
+    # @users =user.all(order=>[:id.desc])
+    
+    erb :"user/users"
 end
