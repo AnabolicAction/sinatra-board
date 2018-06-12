@@ -99,7 +99,3 @@ get '/users' do
     erb :"user/users"
 end
 
-get '/users' do
-    @users -User.all
-    erb :"users"
-end
