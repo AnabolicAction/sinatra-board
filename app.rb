@@ -5,33 +5,7 @@ gem 'json','~> 1.6'
 require 'sinatra'
 require "sinatra/reloader"
 require 'rest-client'
-require 'json'
-require 'httparty'
-require 'nokogiri'
-require 'uri'
-require 'date'
-require 'csv'
-require 'data_mapper' # metagem, requires common plugins too.
-# datamapper 로그찍기
-DataMapper::Logger.new($stdout, :debug)
-# need install dm-sqlite-adapter
-DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/blog.db")
 
-
-class Post
-  include DataMapper::Resource
-  property :id, Serial
-  property :title, String
-  property :body, Text
-  property :created_at, DateTime
-end
-
-# Perform basic sanity checks and initialize all relationships
-# Call this when you've defined all your models
-DataMapper.finalize
-
-# automatically create the post table
-Post.auto_upgrade!
 
 
 #시나트라 사용할꺼임
@@ -91,5 +65,5 @@ end
 get '/posts/update/:id' do
      @id=params[:id]
     Post.get(@id).update(title: params[:title], body: params[:body])
-   redirect '/posts/'+@id
+    redirect '/posts/'+@id
 end
