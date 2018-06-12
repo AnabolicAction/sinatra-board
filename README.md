@@ -223,3 +223,83 @@ end
 
 ~~~
 
+##### bundler를 통한 gem관리
+
+> 어플리케이션의 의존성(dependency)를 관리 해주는 bundler
+
+1.bundler 설치
+
+`gem install bundler`
+
+2.`Gemfile`작성: 루트 디렉토리에 만들기
+
+~~~ruby
+source "http://rubygems.org"
+gem 'sinatra'
+gem 'sinatra-reloader'
+gem 'datamapper'
+gem 'dm-sqlite-adapter'
+~~~
+
+#### heroku 배포
+
+1. heroku에서 addon 추가
+
+   `hreoku postgre`
+
+2. `Gemfile` 수정
+
+   ~~~ruby
+   source 'https://rubygems.org'
+   gem 'json','~> 1.6'
+   gem 'sinatra'
+   gem 'sinatra-reloader'
+   gem 'datamapper'
+   gem 'bcrypt'
+   gem 'json'
+   gem 'rack'
+   
+   group :production do
+       gem 'pg'
+       gem 'dm-postgre-adapter'
+   end
+   
+   group :development, :test do
+       get 'dm-sqlite-adapter'
+   ~~~
+
+   - pg를 쓰는 이유는 헤로쿠에서 지원하는 db이기 떄문
+   - `bundle install --without production`
+
+3. `model.rb` 파일에서 db 파일 수정
+
+   ~~~ruby
+   configure :development do
+   DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/blog.db")
+   end
+   
+   configure :production do
+     DataMapper::setup(:default, ENV["DATABASE_URL"])
+   end
+   ~~~
+
+   - ENV["DATABASE_URL"]은 heroku 서버에서 설정되어 있는 환경 변수.
+
+4. `config.ru` 추가 -> 루트디렉토리에
+
+   ~~~ruby
+   require './app'
+   run Sinatra::Application
+   ~~~
+
+   - 헤로쿠에서 서버를 실행하는 방법이 rake이기 떄문.
+
+5. console에서 헤로쿠로 push
+
+   `$hreoku login`
+
+   `$ git add .`
+
+   `$ git commit -m "msg"`
+
+   `$ git push heroku master`
